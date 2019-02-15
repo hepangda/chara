@@ -15,7 +15,7 @@ class ConcurrencyProxy {
  public:
   template<typename Callable, typename ...Args>
   explicit ConcurrencyProxy(Callable callable, Args ...args) {
-    auto instances = 1u;
+    auto instances = 2u;
 //    TODO: replace it with below
 //    auto instances = std::thread::hardware_concurrency();
     threads_.reserve(instances);

@@ -15,6 +15,8 @@ class Karma {
   Karma();
   void Run();
   void DoTcpAccept();
+  void DoUdpAccept();
+  void SetTcpOption();
  private:
   asio::io_context context_;
   asio::ip::tcp::acceptor tcp_acceptor_;

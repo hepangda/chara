@@ -7,7 +7,6 @@
 
 namespace chara {
 
-Session::Session(asio::ip::tcp::socket socket) : socket_(std::move(socket)) {
-}
+Session::Session(asio::io_context &context): context_(context) {}
 
 }

@@ -14,10 +14,11 @@ namespace chara {
 
 class Session : public std::enable_shared_from_this<Session> {
  public:
-  Session() = delete;
-  explicit Session(asio::ip::tcp::socket socket);
+  virtual void Start() = 0;
+ protected:
+  explicit Session(asio::io_context &context);
  private:
-  asio::ip::tcp::socket socket_;
+  asio::io_context &context_;
 };
 
 }
