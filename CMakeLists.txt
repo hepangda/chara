@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 14)
 link_libraries(pthread)
 add_definitions("-g")
 
-#aux_source_directory()
+aux_source_directory(src/ SOURCE_MAIN)
 
-add_executable(chara chara.cc)
+add_executable(chara
+        ${SOURCE_MAIN}
+        )
