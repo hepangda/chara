@@ -6,18 +6,23 @@
 #ifndef CHARA_TCP_SESSION_H
 #define CHARA_TCP_SESSION_H
 
-#include "session.h"
 #include <asio.hpp>
+#include <utility>
 
 namespace chara {
 
-class TcpSession : public Session {
+class TcpSession : public std::enable_shared_from_this<TcpSession> {
  public:
   TcpSession(asio::io_context &context, asio::ip::tcp::socket socket);
 
-  void Start() final;
+  void Start();
  private:
+  static void Receive(std::shared_ptr<TcpSession> self, const std::error_code &ec, std::size_t bytes);
+  void Consume();
+
   asio::ip::tcp::socket socket_;
+  asio::streambuf buffer_;
+  std::size_t size_;
 };
 
 }

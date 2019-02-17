@@ -9,12 +9,37 @@
 namespace chara {
 
 TcpSession::TcpSession(asio::io_context &context, asio::ip::tcp::socket socket)
-    : Session(context), socket_(std::move(socket)) {}
+    : socket_(std::move(socket)) {}
+
+void TcpSession::Consume() {
+  //
+}
+
+void TcpSession::Receive(std::shared_ptr<TcpSession> self, const std::error_code &ec, std::size_t bytes) {
+  if (!ec) {
+    self->buffer_.commit(bytes);
+    if (self->size_ == self->buffer_.size()) {
+      self->Consume();
+    } else {
+      auto buf = self->buffer_.prepare(self->size_ - self->buffer_.size());
+      self->socket_.async_receive(buf, [self](const std::error_code &ec, std::size_t bytes) {
+        Receive(self, ec, bytes);
+      });
+    }
+  }
+}
 
 void TcpSession::Start() {
-  ByteBuffer buf{1024};
-  socket_.async_receive(buf.ToMutableBuffer(), [] (const std::error_code &ec, std::size_t bytes) {
-
+  auto len_buf = std::make_shared<ByteBuffer>(2);
+  auto self = this->shared_from_this();
+  socket_.async_receive(len_buf->ToMutableBuffer(), [self, len_buf](const std::error_code &ec, std::size_t bytes) {
+    if (!ec) {
+      // TODO: set size_ here.
+      auto buf = self->buffer_.prepare(self->size_);
+      self->socket_.async_receive(buf, [self](const std::error_code &ec, std::size_t bytes) {
+        Receive(self, ec, bytes);
+      });
+    }
   });
 }
 

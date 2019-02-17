@@ -26,7 +26,7 @@ class ByteBuffer : public Noncopyable {
   std::size_t length() const { return length_; }
   void set_length(std::size_t length) { length_ = length; }
  private:
-  std::unique_ptr<Byte> ptr_;
+  std::unique_ptr<Byte[]> ptr_;
   std::size_t length_;
   std::size_t size_;
 };

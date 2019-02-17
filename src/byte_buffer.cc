@@ -7,7 +7,7 @@
 
 namespace chara {
 
-ByteBuffer::ByteBuffer(size_t size) : ptr_(std::make_unique<Byte>(size)), size_(size) {}
+ByteBuffer::ByteBuffer(size_t size) : ptr_(std::make_unique<Byte[]>(size)), size_(size) {}
 
 ByteBuffer::ByteBuffer(ByteBuffer &&buffer) noexcept : ptr_(buffer.ptr_.release()), size_(buffer.size_) {}
 
