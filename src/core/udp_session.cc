@@ -7,8 +7,8 @@
 
 namespace chara {
 
-UdpSession::UdpSession(asio::io_context &context, ByteBuffer buffer) :
-    Session(context), buffer_(std::move(buffer)) {}
+UdpSession::UdpSession(asio::ip::udp::socket socket, asio::ip::udp::endpoint endpoint, ByteBuffer buffer) :
+    socket_(std::move(socket)), endpoint_(std::move(endpoint)), buffer_(std::move(buffer)) {}
 
 void UdpSession::Start() {
 

@@ -6,24 +6,26 @@
 #ifndef CHARA_UDP_SESSION_H
 #define CHARA_UDP_SESSION_H
 
-#include "session.h"
-#include "byte.h"
-#include "byte_buffer.h"
+#include <utility>
 
 #include <asio.hpp>
 
+#include "../utils/byte.h"
+#include "../utils/byte_buffer.h"
+
 namespace chara {
 
-class UdpSession : public Session {
+class UdpSession : public std::enable_shared_from_this<UdpSession> {
  public:
-  explicit UdpSession(asio::io_context &context, ByteBuffer buffer);
+  UdpSession(asio::ip::udp::socket socket, asio::ip::udp::endpoint endpoint, ByteBuffer buffer);
 
-  void Start() final;
+  void Start();
  private:
   ByteBuffer buffer_;
+  asio::ip::udp::socket socket_;
+  asio::ip::udp::endpoint endpoint_;
 };
 
 }
-
 
 #endif //CHARA_UDP_SESSION_H

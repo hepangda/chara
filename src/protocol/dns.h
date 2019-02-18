@@ -6,7 +6,7 @@
 #ifndef CHARA_DNS_H
 #define CHARA_DNS_H
 
-#include "byte.h"
+#include "../utils/byte.h"
 
 namespace chara {
 
@@ -38,6 +38,10 @@ struct DnsHeader {
   Word authority_records;
   Word additional_records;
 };
+
+constexpr Word MakeDnsLabelPointer(Word pointer) {
+  return pointer | ToWord(0xc000);
+} 
 
 enum DnsQueryType {
   kDQTA,

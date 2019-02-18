@@ -17,11 +17,10 @@ class Karma {
   void DoTcpAccept();
   void DoUdpAccept();
   void SetTcpOption();
+  void SetUdpOption(asio::ip::udp::socket &socket, asio::ip::udp::endpoint &endpoint);
  private:
   asio::io_context context_;
-  asio::ip::tcp::acceptor tcp_acceptor_;
-  asio::ip::udp::socket udp_acceptor_;
-
+  asio::ip::tcp::acceptor acceptor_;
 };
 
 }

@@ -13,7 +13,7 @@ namespace chara {
 
 class TcpSession : public std::enable_shared_from_this<TcpSession> {
  public:
-  TcpSession(asio::io_context &context, asio::ip::tcp::socket socket);
+  explicit TcpSession(asio::ip::tcp::socket socket);
 
   void Start();
  private:

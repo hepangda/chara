@@ -4,12 +4,13 @@
 //  LICENSE file in the root directory of this source tree.
 
 #include "tcp_session.h"
-#include "byte_buffer.h"
-#include <iostream>
+
+#include "../utils/byte_buffer.h"
+#include "../utils/streambuf_guard.h"
+
 namespace chara {
 
-TcpSession::TcpSession(asio::io_context &context, asio::ip::tcp::socket socket)
-    : socket_(std::move(socket)) {}
+TcpSession::TcpSession(asio::ip::tcp::socket socket) : socket_(std::move(socket)) {}
 
 void TcpSession::Consume() {
   //
@@ -30,11 +31,14 @@ void TcpSession::Receive(std::shared_ptr<TcpSession> self, const std::error_code
 }
 
 void TcpSession::Start() {
-  auto len_buf = std::make_shared<ByteBuffer>(2);
+  auto len_buf = buffer_.prepare(2);
   auto self = this->shared_from_this();
-  socket_.async_receive(len_buf->ToMutableBuffer(), [self, len_buf](const std::error_code &ec, std::size_t bytes) {
+  socket_.async_receive(len_buf, [self](const std::error_code &ec, std::size_t bytes) {
     if (!ec) {
-      // TODO: set size_ here.
+      {
+        StreambufGuard guard{self->buffer_, 2};
+        self->size_ = *static_cast<const Word *>(self->buffer_.data().data());
+      }
       auto buf = self->buffer_.prepare(self->size_);
       self->socket_.async_receive(buf, [self](const std::error_code &ec, std::size_t bytes) {
         Receive(self, ec, bytes);
