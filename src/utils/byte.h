@@ -12,6 +12,7 @@ namespace chara {
 
 using Byte = uint8_t;
 using Word = uint16_t;
+using DoubleWord = uint32_t;
 
 template <typename T>
 constexpr Word ToWord(T arg) {
