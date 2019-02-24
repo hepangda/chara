@@ -34,6 +34,11 @@ struct DnsHeader {
   Word additional_rrs;
 };
 
+struct DnsOriginQuestion {
+  Word qtype;
+  Word qclass;
+};
+
 struct DnsOriginRr {
   Word type;
   Word rrclass;
@@ -69,7 +74,7 @@ enum DnsRrType {
 enum DnsRrClass {
   kDRCIn = 1,
 };
-
+/*
 void SetDnsFlagQr(Word &word, bool qr) {
   constexpr Word kSetQR = 0b1000'0000'0000'0000;
   constexpr Word kUnsetQR = 0b0111'1111'1111'1111;
@@ -141,8 +146,10 @@ DnsHeaderRcode GetDnsFlagRcode(Word word) {
 constexpr Word MakeDnsLabelPointer(Word pointer) {
   return pointer | ToWord(0xc000);
 }
-
+*/
 ByteBuffer MakeDnsLabelString(const std::string &str);
+
+
 }
 
 #endif //CHARA_DNS_H

@@ -22,6 +22,8 @@ class ByteBuffer : public Noncopyable {
   asio::mutable_buffer ToMutableBuffer();
   asio::const_buffer ToConstBuffer();
 
+  template <typename T = Byte>
+  T *pointer() { return reinterpret_cast<T *>(ptr_.get()); }
   std::size_t size() const { return size_; }
   std::size_t length() const { return length_; }
   void set_length(std::size_t length) { length_ = length; }
