@@ -10,8 +10,8 @@
 int main(int argc, const char *argv[]) {
   using namespace chara;
 
-  auto p =  MakeDnsLabelString(std::string("www.baidu.com"));
-  std::cout.write(p.pointer<char>(), p.size());
+  auto p = std::move(MakeDnsLabelString(std::string("www.baidu.com")));
+  std::cout << (p.pointer<char>()) << std::endl;
 //  ConcurrencyProxy proxy{[] { Karma().Run(); }};
 //  return proxy.Wait();
 }

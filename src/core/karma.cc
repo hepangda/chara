@@ -16,7 +16,7 @@
 
 namespace chara {
 
-Karma::Karma() : acceptor_(context_) {}
+Karma::Karma() : context_(1), acceptor_(context_) {}
 
 void Karma::DoTcpAccept() {
   acceptor_.async_accept([this](const std::error_code &ec, asio::ip::tcp::socket socket) {
