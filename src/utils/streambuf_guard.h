@@ -13,9 +13,12 @@ namespace chara {
 
 class StreambufGuard : public Noncopyable {
  public:
+  // constructors
   StreambufGuard(asio::streambuf &buf, std::size_t size): ref_(buf), size_(size) {
     ref_.commit(size_);
   }
+
+  // destructors
   ~StreambufGuard() {
     ref_.consume(size_);
   }

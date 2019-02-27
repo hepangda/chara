@@ -6,21 +6,24 @@
 #ifndef CHARA_KARMA_H
 #define CHARA_KARMA_H
 
-#include <asio.hpp>
+#include "../utils/net_assist.h"
 
 namespace chara {
 
 class Karma {
  public:
+  // constructors
   Karma();
+
+  // general functions
   void Run();
   void DoTcpAccept();
   void DoUdpAccept();
   void SetTcpOption();
-  void SetUdpOption(asio::ip::udp::socket &socket, asio::ip::udp::endpoint &endpoint);
+  void SetUdpOption(neti::udp::socket &socket, neti::udp::endpoint &endpoint);
  private:
-  asio::io_context context_;
-  asio::ip::tcp::acceptor acceptor_;
+  net::io_context context_;
+  neti::tcp::acceptor acceptor_;
 };
 
 }

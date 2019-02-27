@@ -6,22 +6,29 @@
 #ifndef CHARA_TCP_SESSION_H
 #define CHARA_TCP_SESSION_H
 
-#include <asio.hpp>
 #include <utility>
+
+#include "../utils/net_assist.h"
 
 namespace chara {
 
 class TcpSession : public std::enable_shared_from_this<TcpSession> {
  public:
-  explicit TcpSession(asio::ip::tcp::socket socket);
+  // constructors
+  explicit TcpSession(neti::tcp::socket socket);
 
+  // general functions
   void Start();
  private:
+  // callbacks
   static void Receive(std::shared_ptr<TcpSession> self, const std::error_code &ec, std::size_t bytes);
+
+  // helper functions
   void Consume();
 
-  asio::ip::tcp::socket socket_;
-  asio::streambuf buffer_;
+  // members
+  neti::tcp::socket socket_;
+  net::streambuf buffer_;
   std::size_t size_;
 };
 

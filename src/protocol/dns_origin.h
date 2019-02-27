@@ -46,13 +46,13 @@ struct DnsOriginRr {
   Word rdlength;
 };
 
-enum DnsHeaderOpcode {
+enum DnsHeaderOpcode : Word {
   kDHOQuery = 0,
   kDHOInverseQuery = 1,
   kDHOStatus = 2,
 };
 
-enum DnsHeaderRcode {
+enum DnsHeaderRcode : Word {
   kDHRSuccess = 0,
   kDHRFormatError = 1,
   kDHRServerError = 2,
@@ -61,7 +61,7 @@ enum DnsHeaderRcode {
   kDHRServerDenied = 5,
 };
 
-enum DnsRrType {
+enum DnsRrType : Word {
   kDRTA = 1,
   kDRTNs = 2,
   kDRTCname = 5,
@@ -71,7 +71,7 @@ enum DnsRrType {
   kDRTTxt = 16,
 };
 
-enum DnsRrClass {
+enum DnsRrClass : Word {
   kDRCIn = 1,
 };
 
@@ -97,9 +97,6 @@ void SetDnsFlagRcode(Word &word, DnsHeaderRcode code);
 DnsHeaderRcode GetDnsFlagRcode(Word word);
 
 constexpr Word MakeDnsLabelPointer(Word pointer);
-
-ByteBuffer MakeDnsLabelString(const std::string &str);
-
 }
 
 #endif //CHARA_DNS_H

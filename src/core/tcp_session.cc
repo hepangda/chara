@@ -10,7 +10,7 @@
 
 namespace chara {
 
-TcpSession::TcpSession(asio::ip::tcp::socket socket) : socket_(std::move(socket)) {}
+TcpSession::TcpSession(neti::tcp::socket socket) : socket_(std::move(socket)) {}
 
 void TcpSession::Consume() {
   //

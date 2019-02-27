@@ -13,6 +13,7 @@ namespace chara {
 
 class ConcurrencyProxy {
  public:
+  // constructors
   template<typename Callable, typename ...Args>
   explicit ConcurrencyProxy(Callable callable, Args ...args) {
     auto instances = std::thread::hardware_concurrency();
@@ -23,6 +24,7 @@ class ConcurrencyProxy {
     }
   }
 
+  // general functions
   int Wait() {
     for (auto &i: threads_) {
       i.join();
@@ -30,7 +32,6 @@ class ConcurrencyProxy {
 
     return 0;
   }
-
  private:
   std::vector<std::thread> threads_;
 };

@@ -8,8 +8,7 @@
 
 #include <utility>
 
-#include <asio.hpp>
-
+#include "../utils/net_assist.h"
 #include "../utils/byte.h"
 #include "../utils/byte_buffer.h"
 
@@ -17,13 +16,15 @@ namespace chara {
 
 class UdpSession : public std::enable_shared_from_this<UdpSession> {
  public:
-  UdpSession(asio::ip::udp::socket socket, asio::ip::udp::endpoint endpoint, ByteBuffer buffer);
+  // constructors
+  UdpSession(neti::udp::socket socket, neti::udp::endpoint endpoint, ByteBuffer buffer);
 
+  // general functions
   void Start();
  private:
   ByteBuffer buffer_;
-  asio::ip::udp::socket socket_;
-  asio::ip::udp::endpoint endpoint_;
+  neti::udp::socket socket_;
+  neti::udp::endpoint endpoint_;
 };
 
 }

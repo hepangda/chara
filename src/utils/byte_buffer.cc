@@ -19,4 +19,8 @@ asio::mutable_buffer ByteBuffer::ToMutableBuffer() {
   return asio::buffer(ptr_.get(), size_);
 }
 
+void ByteBuffer::Reset(size_t size) {
+  ptr_ = std::make_unique<Byte[]>(size);
+}
+
 }

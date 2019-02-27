@@ -16,17 +16,27 @@ namespace chara {
 
 class ByteBuffer : public Noncopyable {
  public:
+  // constructors
   explicit ByteBuffer(size_t size);
   ByteBuffer(ByteBuffer &&buffer) noexcept;
 
+  // setters
+  void set_length(std::size_t length) { length_ = length; }
+
+  // getters
+  template <typename T = Byte>
+  T *pointer() { return reinterpret_cast<T *>(ptr_.get()); }
+  template <typename T = Byte>
+  const T *const_pointer() const { return reinterpret_cast<const T *>(ptr_.get()); }
+  std::size_t size() const { return size_; }
+  std::size_t length() const { return length_; }
+
+  // convert getters
   asio::mutable_buffer ToMutableBuffer();
   asio::const_buffer ToConstBuffer();
 
-  template <typename T = Byte>
-  T *pointer() { return reinterpret_cast<T *>(ptr_.get()); }
-  std::size_t size() const { return size_; }
-  std::size_t length() const { return length_; }
-  void set_length(std::size_t length) { length_ = length; }
+  // general functions
+  void Reset(size_t size);
  private:
   std::unique_ptr<Byte[]> ptr_;
   std::size_t length_;
