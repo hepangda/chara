@@ -6,7 +6,7 @@
 #ifndef CHARA_DNS_QUERY_H
 #define CHARA_DNS_QUERY_H
 
-#include "dns_origin.h"
+#include "dnsds.h"
 #include "dns_domain_name.h"
 namespace chara {
 

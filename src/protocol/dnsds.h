@@ -3,8 +3,8 @@
 //  This source code is licensed under the MIT license found in the
 //  LICENSE file in the root directory of this source tree.
 
-#ifndef CHARA_DNS_H
-#define CHARA_DNS_H
+#ifndef CHARA_DNSDS_H
+#define CHARA_DNSDS_H
 
 #include <string>
 
@@ -25,19 +25,6 @@ namespace chara {
  * Authoritative nameservers
  * Additional records
  */
-struct DnsHeader {
-  Word transaction_id;
-  Word flags;
-  Word questions;
-  Word answer_rrs;
-  Word authority_rrs;
-  Word additional_rrs;
-};
-
-struct DnsOriginQuestion {
-  Word qtype;
-  Word qclass;
-};
 
 struct DnsOriginRr {
   Word type;
@@ -75,28 +62,10 @@ enum DnsRrClass : Word {
   kDRCIn = 1,
 };
 
-void SetDnsFlagQr(Word &word, bool qr);
-bool GetDnsFlagQr(Word word);
-
-void SetDnsFlagOpcode(Word &word, DnsHeaderOpcode code);
-DnsHeaderOpcode GetDnsFlagOpcode(Word word);
-
-void SetDnsFlagAa(Word &word, bool aa);
-bool GetDnsFlagAa(Word word);
-
-void SetDnsFlagTc(Word &word, bool tc);
-bool GetDnsFlagTc(Word word);
-
-void SetDnsFlagRd(Word &word, bool rd);
-bool GetDnsFlagRd(Word word);
-
-void SetDnsFlagRa(Word &word, bool ra);
-bool GetDnsFlagRa(Word word);
-
-void SetDnsFlagRcode(Word &word, DnsHeaderRcode code);
-DnsHeaderRcode GetDnsFlagRcode(Word word);
-
-constexpr Word MakeDnsLabelPointer(Word pointer);
+constexpr Word MakeDnsLabelPointer(Word pointer) {
+  return pointer | ToWord(0xc000);
 }
 
-#endif //CHARA_DNS_H
+}
+
+#endif //CHARA_DNSDS_H

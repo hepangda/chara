@@ -81,8 +81,7 @@ bool DnsDomainName::operator==(const DnsDomainName &rhs) {
       auto limit = lhsbuf[i];
       for (auto j = 0; j < limit; j++) {
         i++;
-        // FIXME: case
-        if (lhsbuf[i] != rhsbuf[i]) {
+        if (toupper(lhsbuf[i]) != toupper(rhsbuf[i])) {
           return false;
         }
       }

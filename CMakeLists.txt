@@ -14,4 +14,4 @@ add_executable(chara
         src/chara.cc
         ${SOURCE_CORE}
         ${SOURCE_PROTOCOL}
-        ${SOURCE_UTILS} src/protocol/dns_resolver.cc src/protocol/dns_resolver.h src/protocol/dns_resolver.cc src/protocol/dns_resolver.h src/protocol/dns_packet.cc src/protocol/dns_packet.h src/protocol/dns_origin.cc src/protocol/dns_query.cc src/protocol/dns_query.h src/protocol/dns_domain_name.cc src/protocol/dns_domain_name.h src/utils/net_assist.h src/utils/test_assist.h)
+        ${SOURCE_UTILS} src/protocol/dns_resolver.cc src/protocol/dns_resolver.h src/protocol/dns_resolver.cc src/protocol/dns_resolver.h src/protocol/dns_packet.cc src/protocol/dns_packet.h src/protocol/dns_query.cc src/protocol/dns_query.h src/protocol/dns_domain_name.cc src/protocol/dns_domain_name.h src/utils/net_assist.h src/utils/test_assist.h src/protocol/dns_header.cc src/protocol/dns_header.h)

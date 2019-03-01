@@ -7,7 +7,7 @@
 #define CHARA_DNS_DOMAIN_NAME_H
 
 #include "../utils/byte_buffer.h"
-#include "dns_origin.h"
+#include "dnsds.h"
 namespace chara {
 
 class DnsDomainName : public Noncopyable {
