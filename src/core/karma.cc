@@ -16,7 +16,7 @@
 
 namespace chara {
 
-Karma::Karma() : context_(1), acceptor_(context_) {}
+Karma::Karma() : context_(1), socket_(context_), acceptor_(context_) {}
 
 void Karma::DoTcpAccept() {
   acceptor_.async_accept([this](const std::error_code &ec, neti::tcp::socket socket) {
@@ -29,36 +29,39 @@ void Karma::DoTcpAccept() {
 
 void Karma::DoUdpAccept() {
   ByteBuffer buffer{512};
-  neti::udp::socket socket{context_};
-  neti::udp::endpoint endpoint{neti::udp::v4(), 53};
-  SetUdpOption(socket, endpoint);
+  auto bufp = buffer.ToMutableBuffer();
+  auto endpoint = std::make_shared<neti::udp::endpoint>();
+  std::cout << "Strating...\n";
 
-  socket.async_receive_from(buffer.ToMutableBuffer(), endpoint, [this, &socket, &endpoint, &buffer](auto ec, auto b) {
-    if (!ec) {
-      buffer.set_length(b);
-      std::make_shared<UdpSession>(std::move(socket), std::move(endpoint), std::move(buffer))->Start();
-    }
-    DoUdpAccept();
-  });
+  socket_.async_receive_from(bufp, *endpoint,
+      [this, endpoint, buffer = std::move(buffer)](auto ec, auto b) mutable {
+        if (!ec) {
+          buffer.set_length(b);
+          std::make_shared<UdpSession>(context_, *endpoint, std::move(buffer))->Start();
+        }
+        DoUdpAccept();
+      });
+  std::cout << "Still Listening...\n";
 }
 
 void Karma::SetTcpOption() {
   acceptor_.open(neti::tcp::v4());
   int buf = 1;
   setsockopt(acceptor_.native_handle(), SOL_SOCKET, SO_REUSEPORT, &buf, sizeof(buf));
-  acceptor_.bind({neti::make_address_v4("0.0.0.0"), 8080});
+  acceptor_.bind({neti::tcp::v4(), 53});
   acceptor_.listen(ASIO_OS_DEF_SOMAXCONN);
 }
 
-void Karma::SetUdpOption(neti::udp::socket &socket, neti::udp::endpoint &endpoint) {
-  socket.open(neti::udp::v4());
+void Karma::SetUdpOption() {
+  socket_.open(neti::udp::v4());
   int buf = 1;
-  setsockopt(socket.native_handle(), SOL_SOCKET, SO_REUSEPORT, &buf, sizeof(buf));
-  socket.bind(endpoint);
+  setsockopt(socket_.native_handle(), SOL_SOCKET, SO_REUSEPORT, &buf, sizeof(buf));
+  socket_.bind({neti::udp::v4(), 53});
 }
 
 void Karma::Run() {
   SetTcpOption();
+  SetUdpOption();
   DoTcpAccept();
   DoUdpAccept();
   context_.run();

@@ -21,4 +21,4 @@ class Noncopyable {
 
 }
 
-#endif //CHARA_NONCOPYABLE_H
+#endif // CHARA_NONCOPYABLE_H

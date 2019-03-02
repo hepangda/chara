@@ -16,7 +16,8 @@ class ConcurrencyProxy {
   // constructors
   template<typename Callable, typename ...Args>
   explicit ConcurrencyProxy(Callable callable, Args ...args) {
-    auto instances = std::thread::hardware_concurrency();
+//    auto instances = std::thread::hardware_concurrency();
+    auto instances = 1;
     threads_.reserve(instances);
 
     for (auto i = 0; i < instances; i++) {
@@ -38,4 +39,4 @@ class ConcurrencyProxy {
 
 }
 
-#endif //CHARA_CONCURRENCY_PROXY_H
+#endif // CHARA_CONCURRENCY_PROXY_H

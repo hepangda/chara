@@ -68,6 +68,7 @@ void DnsDomainName::do_set_domain_name(const char *domain_name, std::size_t leng
     }
   }
   *(store_.pointer<Byte>() + store_.size() - 1) = 0;
+  store_.set_length(store_.size());
 }
 
 bool DnsDomainName::operator==(const DnsDomainName &rhs) {

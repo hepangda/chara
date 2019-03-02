@@ -10,6 +10,7 @@
 #include "../utils/byte.h"
 #include "dns_query.h"
 #include "dns_header.h"
+#include "dns_resource_record.h"
 namespace chara {
 
 class DnsPacket {
@@ -17,8 +18,11 @@ class DnsPacket {
  private:
   DnsHeader header_;
   std::vector<DnsQuery> questions_;
+  std::vector<DnsResourceRecord> answers_;
+  std::vector<DnsResourceRecord> authority_;
+  std::vector<DnsResourceRecord> additonal_;
 };
 
 }
 
-#endif //CHARA_DNS_PACKET_H
+#endif // CHARA_DNS_PACKET_H

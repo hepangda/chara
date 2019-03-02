@@ -20,13 +20,18 @@ class ByteBuffer : public Noncopyable {
   explicit ByteBuffer(size_t size);
   ByteBuffer(ByteBuffer &&buffer) noexcept;
 
+  // move operator
+  ByteBuffer &operator =(ByteBuffer &&rhs) noexcept;
+
   // setters
   void set_length(std::size_t length) { length_ = length; }
 
   // getters
-  template <typename T = Byte>
+  template<typename T = Byte>
   T *pointer() { return reinterpret_cast<T *>(ptr_.get()); }
-  template <typename T = Byte>
+  template<typename T = Byte>
+  T *write_pointer() { return reinterpret_cast<T *>(ptr_.get() + size_); }
+  template<typename T = Byte>
   const T *const_pointer() const { return reinterpret_cast<const T *>(ptr_.get()); }
   std::size_t size() const { return size_; }
   std::size_t length() const { return length_; }
@@ -36,7 +41,29 @@ class ByteBuffer : public Noncopyable {
   asio::const_buffer ToConstBuffer();
 
   // general functions
+  size_t Available() const { return size_ - length_; }
   void Reset(size_t size);
+  void Expand(size_t size);
+  void CopyAll(ByteBuffer &dest) const;
+  void Put(const ByteBuffer &buffer);
+
+  template<typename T>
+  void Put(T x) {
+    if (Available() < sizeof(T)) {
+      Expand(sizeof(T));
+    }
+    *write_pointer() = x;
+    size_ += sizeof(T);
+  }
+
+  template<typename T>
+  void Put(T *x, size_t size) {
+    if (Available() < size) {
+      Expand(size);
+    }
+    memcpy(write_pointer(), x, size);
+    size_ += size;
+  }
  private:
   std::unique_ptr<Byte[]> ptr_;
   std::size_t length_;
@@ -45,4 +72,4 @@ class ByteBuffer : public Noncopyable {
 
 }
 
-#endif //CHARA_BYTE_BUFFER_H
+#endif // CHARA_BYTE_BUFFER_H

@@ -12,26 +12,6 @@
 #include "../utils/byte_buffer.h"
 
 namespace chara {
-/*
- * DNS Format
- * Transcation ID
- * Flags
- * Questions
- * Answer RRs
- * Authority RRs
- * Additional RRs
- * Queries
- * Answers
- * Authoritative nameservers
- * Additional records
- */
-
-struct DnsOriginRr {
-  Word type;
-  Word rrclass;
-  DoubleWord ttl;
-  Word rdlength;
-};
 
 enum DnsHeaderOpcode : Word {
   kDHOQuery = 0,
@@ -68,4 +48,4 @@ constexpr Word MakeDnsLabelPointer(Word pointer) {
 
 }
 
-#endif //CHARA_DNSDS_H
+#endif // CHARA_DNSDS_H

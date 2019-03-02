@@ -21,4 +21,4 @@ constexpr Word ToWord(T arg) {
 
 }
 
-#endif //CHARA_BYTE_H
+#endif // CHARA_BYTE_H

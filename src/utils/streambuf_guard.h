@@ -29,4 +29,4 @@ class StreambufGuard : public Noncopyable {
 
 }
 
-#endif //CHARA_STREAMBUF_GUARD_H
+#endif // CHARA_STREAMBUF_GUARD_H

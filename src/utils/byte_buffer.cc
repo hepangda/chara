@@ -4,15 +4,22 @@
 //  LICENSE file in the root directory of this source tree.
 
 #include "byte_buffer.h"
-
+#include <iostream>
 namespace chara {
 
 ByteBuffer::ByteBuffer(size_t size) : ptr_(std::make_unique<Byte[]>(size)), size_(size) {}
 
-ByteBuffer::ByteBuffer(ByteBuffer &&buffer) noexcept : ptr_(buffer.ptr_.release()), size_(buffer.size_) {}
+ByteBuffer::ByteBuffer(ByteBuffer &&buffer) noexcept : ptr_(buffer.ptr_.release()), size_(buffer.size_), length_(buffer.length_) {}
+
+ByteBuffer& ByteBuffer::operator=(ByteBuffer &&rhs) noexcept {
+  ptr_.swap(rhs.ptr_);
+  size_ = rhs.size_;
+  length_ = rhs.length_;
+  return *this;
+}
 
 asio::const_buffer ByteBuffer::ToConstBuffer() {
-  return asio::buffer(ptr_.get(), size_);
+  return asio::buffer(ptr_.get(), length_);
 }
 
 asio::mutable_buffer ByteBuffer::ToMutableBuffer() {
@@ -21,6 +28,25 @@ asio::mutable_buffer ByteBuffer::ToMutableBuffer() {
 
 void ByteBuffer::Reset(size_t size) {
   ptr_ = std::make_unique<Byte[]>(size);
+  size_ = size;
+  length_ = 0;
+}
+
+void ByteBuffer::CopyAll(ByteBuffer &dest) const {
+  dest.Reset(size());
+  dest.size_ = size_;
+  dest.length_ = length_;
+  memcpy(dest.ptr_.get(), ptr_.get(), size());
+}
+
+void ByteBuffer::Expand(size_t size) {
+  auto new_ptr = std::make_unique<Byte[]>(size_ + size);
+  memcpy(new_ptr.get(), ptr_.get(), size_);
+  ptr_.swap(new_ptr);
+}
+
+void ByteBuffer::Put(const ByteBuffer &buffer) {
+  Put(buffer.const_pointer(), buffer.length());
 }
 
 }

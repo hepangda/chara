@@ -25,6 +25,8 @@ class DnsDomainName : public Noncopyable {
   // getters
   const char *domain_name() const { return reinterpret_cast<const char *>(store_.const_pointer()); }
   std::string domain_name_string() const { return std::move(std::string(store_.const_pointer<char>(), store_.size())); }
+  std::size_t domain_size() const { return store_.size(); }
+  const ByteBuffer &buffer() const { return store_; }
 
   // operators
   bool operator==(const DnsDomainName &rhs);
@@ -41,4 +43,4 @@ class DnsDomainName : public Noncopyable {
 
 }
 
-#endif //CHARA_DNS_DOMAIN_NAME_H
+#endif // CHARA_DNS_DOMAIN_NAME_H

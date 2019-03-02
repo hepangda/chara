@@ -13,6 +13,9 @@ namespace chara {
 
 class DnsHeader {
  public:
+  // constructors
+  DnsHeader() = default;
+
   // setters
   void set_transaction_id(Word id) { transaction_id_ = id; }
   void set_flag_qr(bool qr);
@@ -42,7 +45,7 @@ class DnsHeader {
   Word additional_rrs() const { return additional_rrs_; }
  private:
   Word transaction_id_;
-  Word flags_;
+  Word flags_ {0};
   Word questions_;
   Word answer_rrs_;
   Word authority_rrs_;
@@ -51,4 +54,4 @@ class DnsHeader {
 
 }
 
-#endif //CHARA_DNS_HEADER_H
+#endif // CHARA_DNS_HEADER_H

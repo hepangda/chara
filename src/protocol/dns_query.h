@@ -38,4 +38,4 @@ class DnsQuery {
 
 }
 
-#endif //CHARA_DNS_QUERY_H
+#endif // CHARA_DNS_QUERY_H

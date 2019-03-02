@@ -17,16 +17,19 @@ namespace chara {
 class UdpSession : public std::enable_shared_from_this<UdpSession> {
  public:
   // constructors
-  UdpSession(neti::udp::socket socket, neti::udp::endpoint endpoint, ByteBuffer buffer);
+  UdpSession(net::io_context &context, neti::udp::endpoint endpoint, ByteBuffer buffer);
 
   // general functions
   void Start();
  private:
+//  static void Receive(std::shared_ptr<UdpSession> self, )
   ByteBuffer buffer_;
+  neti::udp::socket rep_socket_;
+  net::streambuf rep_buf_;
   neti::udp::socket socket_;
   neti::udp::endpoint endpoint_;
 };
 
 }
 
-#endif //CHARA_UDP_SESSION_H
+#endif // CHARA_UDP_SESSION_H

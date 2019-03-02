@@ -23,4 +23,4 @@ class TestAssist {
 
 }
 
-#endif //CHARA_TEST_ASSIST_H
+#endif // CHARA_TEST_ASSIST_H

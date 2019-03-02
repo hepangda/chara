@@ -15,4 +15,4 @@ namespace neti = asio::ip;
 
 }
 
-#endif //CHARA_NET_ASSIST_H
+#endif // CHARA_NET_ASSIST_H

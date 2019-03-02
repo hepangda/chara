@@ -34,4 +34,4 @@ class TcpSession : public std::enable_shared_from_this<TcpSession> {
 
 }
 
-#endif //CHARA_TCP_SESSION_H
+#endif // CHARA_TCP_SESSION_H

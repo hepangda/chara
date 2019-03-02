@@ -20,12 +20,13 @@ class Karma {
   void DoTcpAccept();
   void DoUdpAccept();
   void SetTcpOption();
-  void SetUdpOption(neti::udp::socket &socket, neti::udp::endpoint &endpoint);
+  void SetUdpOption();
  private:
   net::io_context context_;
   neti::tcp::acceptor acceptor_;
+  neti::udp::socket socket_;
 };
 
 }
 
-#endif //CHARA_KARMA_H
+#endif // CHARA_KARMA_H

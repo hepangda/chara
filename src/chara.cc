@@ -16,13 +16,14 @@ constexpr bool kTestFlag = false;
 int main(int argc, const char *argv[]) {
   using namespace chara;
 
-  TestAssist ta { kTestFlag, [] {
-    DnsDomainName da { "www.baidu.com" };
-    DnsDomainName db { "WwW.BaiDU.cOm"};
+  TestAssist{kTestFlag, [] {
+    DnsDomainName da{"www.baidu.com"};
+    DnsDomainName db{"WwW.BaiDU.cOm"};
     std::cout << da.domain_name_string() << std::endl;
     std::cout << (da == db ? "true" : "false") << std::endl;
   }};
 
-  ConcurrencyProxy proxy{[] { Karma().Run(); }};
-  return proxy.Wait();
+  return ConcurrencyProxy{[] {
+    Karma().Run();
+  }}.Wait();
 }
