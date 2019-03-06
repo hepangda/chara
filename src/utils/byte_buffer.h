@@ -46,7 +46,7 @@ class ByteBuffer : public Noncopyable {
   void Expand(size_t size);
   void CopyAll(ByteBuffer &dest) const;
   void Put(const ByteBuffer &buffer);
-
+  void Put(const void *x, size_t size);
   template<typename T>
   void Put(T x) {
     if (Available() < sizeof(T)) {
@@ -56,14 +56,7 @@ class ByteBuffer : public Noncopyable {
     size_ += sizeof(T);
   }
 
-  template<typename T>
-  void Put(T *x, size_t size) {
-    if (Available() < size) {
-      Expand(size);
-    }
-    memcpy(write_pointer(), x, size);
-    size_ += size;
-  }
+
  private:
   std::unique_ptr<Byte[]> ptr_;
   std::size_t length_;

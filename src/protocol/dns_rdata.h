@@ -33,9 +33,16 @@ class DnsRdata {
   void SetPtr(const DnsDomainName &name);
   void SetPtr(DnsDomainName &&name);
 
-  void SetSoa();
-  void SetTxt();
-  void SetA();
+  void SetTxt(Byte length, char *txt);
+
+  void SetA(const std::string &dotdex);
+  void SetA(const char *dotdex, size_t length);
+
+  void SetSoa(const DnsDomainName &mname, const DnsDomainName &rname, DoubleWord serial, DoubleWord refresh,
+              DoubleWord retry, DoubleWord expire, DoubleWord minimum);
+
+  void SetSoa(DnsDomainName &&mname, DnsDomainName &&rname, DoubleWord serial, DoubleWord refresh, DoubleWord retry,
+              DoubleWord expire, DoubleWord minimum);
 
   // getters
   void Output(void *dest) const;

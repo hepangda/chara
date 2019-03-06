@@ -15,13 +15,18 @@ namespace chara {
 
 class DnsPacket {
  public:
- private:
+  friend DnsPacket ConstructDnsPacket(void *stream);
+// private:
+  DnsPacket() = default;
+
   DnsHeader header_;
   std::vector<DnsQuery> questions_;
   std::vector<DnsResourceRecord> answers_;
   std::vector<DnsResourceRecord> authority_;
   std::vector<DnsResourceRecord> additonal_;
 };
+
+DnsPacket ConstructDnsPacket(void *stream);
 
 }
 

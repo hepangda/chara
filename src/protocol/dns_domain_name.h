@@ -13,8 +13,11 @@ namespace chara {
 class DnsDomainName : public Noncopyable {
  public:
   // constructors
+  explicit DnsDomainName(size_t length): store_(length) {}
   explicit DnsDomainName(const std::string &domain_name);
   explicit DnsDomainName(const char *domain_name);
+  DnsDomainName(DnsDomainName &&rhs) noexcept;
+
   DnsDomainName(const char *domain_name, std::size_t length);
 
   // setters
@@ -34,12 +37,18 @@ class DnsDomainName : public Noncopyable {
   // general functions
   DnsDomainName &&Copy() const;
   std::unique_ptr<DnsDomainName> CopyUniquePtr() const;
+
+  // raw constructor
+  friend std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void *&stream, size_t length);
  private:
   void do_set_domain_name(const std::string &domain_name);
   void do_set_domain_name(const char *domain_name, std::size_t length);
 
   ByteBuffer store_;
 };
+
+std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void *&stream);
+std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void *&stream, size_t length);
 
 }
 

@@ -25,7 +25,7 @@ class DnsHeader {
   void set_flag_rd(bool rd);
   void set_flag_ra(bool ra);
   void set_flag_rcode(DnsHeaderRcode rcode);
-  void set_questions(Word q) { questions_ = q;}
+  void set_questions(Word q) { questions_ = q; }
   void set_answer_rrs(Word rr) { answer_rrs_ = rr; }
   void set_authority_rrs(Word rr) { authority_rrs_ = rr; }
   void set_additional_rrs(Word rr) { additional_rrs_ = rr; }
@@ -43,14 +43,19 @@ class DnsHeader {
   Word answer_rrs() const { return answer_rrs_; }
   Word authority_rrs() const { return authority_rrs_; }
   Word additional_rrs() const { return additional_rrs_; }
+
+  // friend constructors
+  friend DnsHeader ConstructDnsHeader(void *&stream);
  private:
-  Word transaction_id_;
-  Word flags_ {0};
-  Word questions_;
-  Word answer_rrs_;
-  Word authority_rrs_;
-  Word additional_rrs_;
+  Word transaction_id_{0};
+  Word flags_{0};
+  Word questions_{0};
+  Word answer_rrs_{0};
+  Word authority_rrs_{0};
+  Word additional_rrs_{0};
 };
+
+DnsHeader ConstructDnsHeader(void *&stream);
 
 }
 

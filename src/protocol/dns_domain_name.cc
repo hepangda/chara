@@ -100,4 +100,21 @@ std::unique_ptr<DnsDomainName> DnsDomainName::CopyUniquePtr() const {
   return std::make_unique<DnsDomainName>(domain_name(), store_.size());
 }
 
+DnsDomainName::DnsDomainName(DnsDomainName &&rhs) noexcept : store_(1) {
+  store_ = std::move(rhs.store_);
+}
+
+std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void *&stream) {
+  return ConstructDnsDomainName(stream, strlen(static_cast<char *>(stream)) + 1);
+}
+
+std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void *&stream, size_t length) {
+  auto ret = std::make_unique<DnsDomainName>(length);
+  ret->store_.Put(stream, length);
+  ret->store_.set_length(length);
+  stream = static_cast<char *>(stream) + length;
+  return ret;
+}
+
+
 }

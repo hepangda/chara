@@ -28,27 +28,24 @@ void Karma::DoTcpAccept() {
 }
 
 void Karma::DoUdpAccept() {
-  ByteBuffer buffer{512};
+  ByteBuffer buffer{kDnsUdpLength};
   auto bufp = buffer.ToMutableBuffer();
   auto endpoint = std::make_shared<neti::udp::endpoint>();
-  std::cout << "Strating...\n";
 
-  socket_.async_receive_from(bufp, *endpoint,
-      [this, endpoint, buffer = std::move(buffer)](auto ec, auto b) mutable {
-        if (!ec) {
-          buffer.set_length(b);
-          std::make_shared<UdpSession>(context_, *endpoint, std::move(buffer))->Start();
-        }
-        DoUdpAccept();
-      });
-  std::cout << "Still Listening...\n";
+  socket_.async_receive_from(bufp, *endpoint, [this, endpoint, buffer = std::move(buffer)](auto ec, auto b) mutable {
+    if (!ec) {
+      buffer.set_length(b);
+      std::make_shared<UdpSession>(context_, *endpoint, std::move(buffer))->Start();
+    }
+    DoUdpAccept();
+  });
 }
 
 void Karma::SetTcpOption() {
   acceptor_.open(neti::tcp::v4());
   int buf = 1;
   setsockopt(acceptor_.native_handle(), SOL_SOCKET, SO_REUSEPORT, &buf, sizeof(buf));
-  acceptor_.bind({neti::tcp::v4(), 53});
+  acceptor_.bind({neti::tcp::v4(), kDnsServerPort});
   acceptor_.listen(ASIO_OS_DEF_SOMAXCONN);
 }
 
@@ -56,7 +53,7 @@ void Karma::SetUdpOption() {
   socket_.open(neti::udp::v4());
   int buf = 1;
   setsockopt(socket_.native_handle(), SOL_SOCKET, SO_REUSEPORT, &buf, sizeof(buf));
-  socket_.bind({neti::udp::v4(), 53});
+  socket_.bind({neti::udp::v4(), kDnsServerPort});
 }
 
 void Karma::Run() {

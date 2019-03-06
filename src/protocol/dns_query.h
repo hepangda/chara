@@ -30,11 +30,16 @@ class DnsQuery {
   std::string domain_name_string() const { return (qname_ ? qname_->domain_name() : std::string()); }
   DnsRrType qtype() const { return static_cast<DnsRrType>(qtype_); }
   DnsRrClass qclass() const { return static_cast<DnsRrClass>(qclass_); }
+
+  // raw constructor
+  friend DnsQuery ConstructDnsQuery(void *&stream);
  private:
   std::unique_ptr<DnsDomainName> qname_;
   Word qtype_;
   Word qclass_;
 };
+
+DnsQuery ConstructDnsQuery(void *&stream);
 
 }
 

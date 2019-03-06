@@ -22,7 +22,7 @@ void UdpSession::Start() {
       self->socket_.open(neti::udp::v4());
       int buf = 1;
       setsockopt(self->socket_.native_handle(), SOL_SOCKET, SO_REUSEPORT, &buf, sizeof(buf));
-      self->socket_.bind({neti::udp::v4(), 53});
+      self->socket_.bind({neti::udp::v4(), 8053});
 
       self->socket_.async_send_to(self->rep_buf_.data(),
           self->endpoint_,

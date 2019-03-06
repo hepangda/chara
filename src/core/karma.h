@@ -22,6 +22,7 @@ class Karma {
   void SetTcpOption();
   void SetUdpOption();
  private:
+  enum { kDnsServerPort = 8053, kDnsUdpLength = 512 };
   net::io_context context_;
   neti::tcp::acceptor acceptor_;
   neti::udp::socket socket_;

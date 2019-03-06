@@ -19,6 +19,10 @@ constexpr Word ToWord(T arg) {
   return static_cast<Word>(arg);
 }
 
+constexpr Word ExchangeEndian(Word w) {
+  return (w >> 8) | (w << 8);
+}
+
 }
 
 #endif // CHARA_BYTE_H

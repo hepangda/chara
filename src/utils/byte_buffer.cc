@@ -9,9 +9,10 @@ namespace chara {
 
 ByteBuffer::ByteBuffer(size_t size) : ptr_(std::make_unique<Byte[]>(size)), size_(size) {}
 
-ByteBuffer::ByteBuffer(ByteBuffer &&buffer) noexcept : ptr_(buffer.ptr_.release()), size_(buffer.size_), length_(buffer.length_) {}
+ByteBuffer::ByteBuffer(ByteBuffer &&buffer) noexcept
+    : ptr_(buffer.ptr_.release()), size_(buffer.size_), length_(buffer.length_) {}
 
-ByteBuffer& ByteBuffer::operator=(ByteBuffer &&rhs) noexcept {
+ByteBuffer &ByteBuffer::operator=(ByteBuffer &&rhs) noexcept {
   ptr_.swap(rhs.ptr_);
   size_ = rhs.size_;
   length_ = rhs.length_;
@@ -43,6 +44,14 @@ void ByteBuffer::Expand(size_t size) {
   auto new_ptr = std::make_unique<Byte[]>(size_ + size);
   memcpy(new_ptr.get(), ptr_.get(), size_);
   ptr_.swap(new_ptr);
+}
+
+void ByteBuffer::Put(const void *x, size_t size) {
+  if (Available() < size) {
+    Expand(size);
+  }
+  memcpy(write_pointer(), x, size);
+  size_ += size;
 }
 
 void ByteBuffer::Put(const ByteBuffer &buffer) {

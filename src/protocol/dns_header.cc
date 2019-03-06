@@ -75,4 +75,18 @@ DnsHeaderRcode DnsHeader::flag_rcode() const {
   return static_cast<DnsHeaderRcode>(flags_ & getter);
 }
 
+DnsHeader ConstructDnsHeader(void *&stream) {
+  DnsHeader ret;
+  memcpy(&ret, stream, sizeof(DnsHeader));
+  ret.transaction_id_ = ExchangeEndian(ret.transaction_id_);
+  ret.flags_ = ExchangeEndian(ret.flags_);
+  ret.questions_ = ExchangeEndian(ret.questions_);
+  ret.answer_rrs_ = ExchangeEndian(ret.answer_rrs_);
+  ret.authority_rrs_ = ExchangeEndian(ret.authority_rrs_);
+  ret.additional_rrs_ = ExchangeEndian(ret.additional_rrs_);
+  stream = static_cast<char *>(stream) + sizeof(DnsHeader);
+
+  return ret;
+}
+
 }
