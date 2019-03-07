@@ -45,6 +45,34 @@ constexpr Word MakeDnsLabelPointer(Word pointer) {
   return pointer | ToWord(0xc000);
 }
 
+constexpr bool IsDnsLabel(Word w) {
+  return (w & 0x00c0) == 0x00c0;
+}
+
+constexpr Word  GetDnsLabel(Word w) {
+  return ExchangeEndian(static_cast<Word>(w & 0xff3f));
+}
+
+constexpr void *AddPointer(void *base, size_t offset) {
+  return static_cast<Byte *>(base) + offset;
+}
+
+inline void MovePointer(void **ptr, size_t offset) {
+  *ptr = static_cast<Byte *>(*ptr) + offset;
+}
+
+inline Word ExtractWord(void **stream) {
+  Word ret = *static_cast<Word *>(*stream);
+  MovePointer(stream, sizeof(Word));
+  return ExchangeEndian(ret);
+}
+
+inline DoubleWord ExtractDoubleWord(void **stream) {
+  DoubleWord ret = *static_cast<DoubleWord *>(*stream);
+  MovePointer(stream, sizeof(DoubleWord));
+  return ExchangeEndian(ret);
+}
+
 }
 
 #endif // CHARA_DNSDS_H

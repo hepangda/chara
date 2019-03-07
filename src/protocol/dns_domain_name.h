@@ -40,7 +40,7 @@ class DnsDomainName : public Noncopyable {
   std::unique_ptr<DnsDomainName> CopyUniquePtr() const;
 
   // raw constructor
-  friend std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void *&stream, size_t length);
+  friend std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void **cursor, void *base);
  private:
   void do_set_domain_name(const std::string &domain_name);
   void do_set_domain_name(const char *domain_name, std::size_t length);
@@ -48,8 +48,7 @@ class DnsDomainName : public Noncopyable {
   ByteBuffer store_;
 };
 
-std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void *&stream);
-std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void *&stream, size_t length);
+std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void **cursor, void *base);
 
 }
 

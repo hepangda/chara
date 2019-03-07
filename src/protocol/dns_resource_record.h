@@ -13,20 +13,21 @@ namespace chara {
 
 class DnsResourceRecord {
  public:
-  friend DnsResourceRecord ConstructDnsResourceRecord(void *&stream);
+  friend DnsResourceRecord ConstructDnsResourceRecord(void **cursor, void *base);
 
  private:
-  explicit DnsResourceRecord(std::unique_ptr<DnsDomainName> ddn) : name_(std::move(*ddn)) {}
+  DnsResourceRecord(std::unique_ptr<DnsDomainName> ddn, Word type, Word rclass, DoubleWord ttl, Word rdlength) :
+      name_(std::move(*ddn)), type_(type), class_(rclass), ttl_(ttl), rdlength_(rdlength) {}
 
   DnsDomainName name_;
-  Word type_ {0};
-  Word class_ {0};
-  DoubleWord ttl_ {0};
-  Word rdlength_ {0};
-  DnsRdata rdata_ {};
+  Word type_;
+  Word class_;
+  DoubleWord ttl_;
+  Word rdlength_;
+  DnsRdata rdata_{};
 };
 
-DnsResourceRecord ConstructDnsResourceRecord(void *&stream);
+DnsResourceRecord ConstructDnsResourceRecord(void **cursor, void *base);
 
 }
 

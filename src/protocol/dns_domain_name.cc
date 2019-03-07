@@ -19,6 +19,7 @@ size_t CalcLabelBufferSize(const std::string &str) {
 size_t CalcLabelBufferSize(const char *str, size_t length) {
   return length + ((str[length - 1] == '.') ? 1 : 2);
 }
+
 }
 
 DnsDomainName::DnsDomainName(const std::string &domain_name) :
@@ -104,17 +105,26 @@ DnsDomainName::DnsDomainName(DnsDomainName &&rhs) noexcept : store_(1) {
   store_ = std::move(rhs.store_);
 }
 
-std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void *&stream) {
-  return ConstructDnsDomainName(stream, strlen(static_cast<char *>(stream)) + 1);
-}
+std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void **cursor, void *base) {
+  auto work = [](void *base) {
+    size_t length = 1;
+    for (auto bts = static_cast<Byte *>(base); bts[length - 1] != 0; length++);
 
-std::unique_ptr<DnsDomainName> ConstructDnsDomainName(void *&stream, size_t length) {
-  auto ret = std::make_unique<DnsDomainName>(length);
-  ret->store_.Put(stream, length);
-  ret->store_.set_length(length);
-  stream = static_cast<char *>(stream) + length;
-  return ret;
-}
+    auto ret = std::make_unique<DnsDomainName>(length);
+    ret->store_.Put(base, length);
+    return std::make_pair(std::move(ret), length);
+  };
 
+  Word label = *static_cast<Word *>(*cursor);
+  if (IsDnsLabel(label)) {
+    auto ret = work(AddPointer(base, GetDnsLabel(label)));
+    MovePointer(cursor, sizeof(Word));
+    return std::move(ret.first);
+  } else {
+    auto ret = work(*cursor);
+    MovePointer(cursor, ret.second);
+    return std::move(ret.first);
+  }
+}
 
 }

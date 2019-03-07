@@ -15,6 +15,7 @@ class DnsHeader {
  public:
   // constructors
   DnsHeader() = default;
+  DnsHeader(Word transaction_id, Word flags, Word questions, Word answer_rrs, Word authority_rrs, Word additional_rrs);
 
   // setters
   void set_transaction_id(Word id) { transaction_id_ = id; }
@@ -43,9 +44,6 @@ class DnsHeader {
   Word answer_rrs() const { return answer_rrs_; }
   Word authority_rrs() const { return authority_rrs_; }
   Word additional_rrs() const { return additional_rrs_; }
-
-  // friend constructors
-  friend DnsHeader ConstructDnsHeader(void *&stream);
  private:
   Word transaction_id_{0};
   Word flags_{0};
@@ -55,7 +53,7 @@ class DnsHeader {
   Word additional_rrs_{0};
 };
 
-DnsHeader ConstructDnsHeader(void *&stream);
+DnsHeader ConstructDnsHeader(void **cursor, void *base);
 
 }
 

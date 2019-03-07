@@ -7,23 +7,17 @@
 
 namespace chara {
 
-DnsResourceRecord ConstructDnsResourceRecord(void *&stream) {
-  DnsResourceRecord ret(std::move(ConstructDnsDomainName(stream)));
+DnsResourceRecord ConstructDnsResourceRecord(void **cursor, void *base) {
+  DnsResourceRecord ret{
+      std::move(ConstructDnsDomainName(cursor, base)),  // name_
+      ExtractWord(cursor),                              // type_
+      ExtractWord(cursor),                              // class_
+      ExtractDoubleWord(cursor),                        // ttl_
+      ExtractWord(cursor)                               // rdlength_
+  };
 
-  ret.type_ = *static_cast<Word *>(stream);
-  stream = static_cast<char *>(stream) + sizeof(Word);
-
-  ret.class_ = *static_cast<Word *>(stream);
-  stream = static_cast<char *>(stream) + sizeof(Word);
-
-  ret.ttl_ = *static_cast<DoubleWord *>(stream);
-  stream = static_cast<char *>(stream) + sizeof(DoubleWord);
-
-  ret.rdlength_ = *static_cast<Word *>(stream);
-  stream = static_cast<char *>(stream) + sizeof(Word);
-
-  ret.rdata_.SetRaw(stream, ret.rdlength_);
-  stream = static_cast<char *>(stream) + ret.rdlength_;
+  ret.rdata_.SetRaw(*cursor, ret.rdlength_);
+  MovePointer(cursor, ret.rdlength_);
 
   return std::move(ret);
 }

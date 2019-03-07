@@ -16,6 +16,7 @@ class DnsQuery {
   explicit DnsQuery(DnsRrType qtype = kDRTA, DnsRrClass qclass = kDRCIn);
   explicit DnsQuery(const std::string &domain_name, DnsRrType qtype = kDRTA, DnsRrClass qclass = kDRCIn);
   DnsQuery(const char *domain_name, std::size_t length, DnsRrType qtype = kDRTA, DnsRrClass qclass = kDRCIn);
+  DnsQuery(std::unique_ptr<DnsDomainName> qname, Word qtype, Word qclass);
 
   // setters
   void set_domain_name(const std::string &domain_name) { qname_ = std::make_unique<DnsDomainName>(domain_name); }
@@ -32,14 +33,14 @@ class DnsQuery {
   DnsRrClass qclass() const { return static_cast<DnsRrClass>(qclass_); }
 
   // raw constructor
-  friend DnsQuery ConstructDnsQuery(void *&stream);
+  friend DnsQuery ConstructDnsQuery(void **cursor, void *base);
  private:
   std::unique_ptr<DnsDomainName> qname_;
   Word qtype_;
   Word qclass_;
 };
 
-DnsQuery ConstructDnsQuery(void *&stream);
+DnsQuery ConstructDnsQuery(void **cursor, void *base);
 
 }
 

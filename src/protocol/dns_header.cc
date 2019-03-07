@@ -9,6 +9,11 @@
 
 namespace chara {
 
+DnsHeader::DnsHeader(Word transaction_id, Word flags, Word questions,
+                     Word answer_rrs, Word authority_rrs, Word additional_rrs)
+    : transaction_id_(transaction_id), flags_(flags), questions_(questions),
+    answer_rrs_(answer_rrs), authority_rrs_(authority_rrs), additional_rrs_(additional_rrs) {}
+
 void DnsHeader::set_flag_qr(bool qr) {
   constexpr Word kSetQr = 0b1000'0000'0000'0000;
   constexpr Word kUnsetQr = 0b0111'1111'1111'1111;
@@ -77,18 +82,16 @@ DnsHeaderRcode DnsHeader::flag_rcode() const {
   return static_cast<DnsHeaderRcode>(flags_ & getter);
 }
 
-DnsHeader ConstructDnsHeader(void *&stream) {
-  DnsHeader ret;
-  memcpy(&ret, stream, sizeof(DnsHeader));
-  ret.transaction_id_ = ExchangeEndian(ret.transaction_id_);
-  ret.flags_ = ExchangeEndian(ret.flags_);
-  ret.questions_ = ExchangeEndian(ret.questions_);
-  ret.answer_rrs_ = ExchangeEndian(ret.answer_rrs_);
-  ret.authority_rrs_ = ExchangeEndian(ret.authority_rrs_);
-  ret.additional_rrs_ = ExchangeEndian(ret.additional_rrs_);
-  stream = static_cast<char *>(stream) + sizeof(DnsHeader);
-
-  return ret;
+DnsHeader ConstructDnsHeader(void **cursor, void *base) {
+  return {
+      ExtractWord(cursor),  // transaction_id_
+      ExtractWord(cursor),  // flags_
+      ExtractWord(cursor),  // questions_
+      ExtractWord(cursor),  // answer_rrs_
+      ExtractWord(cursor),  // authority_rrs_
+      ExtractWord(cursor)   // additional_rrs_
+  };
 }
+
 
 }
