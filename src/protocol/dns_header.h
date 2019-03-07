@@ -6,8 +6,8 @@
 #ifndef CHARA_DNS_HEADER_H
 #define CHARA_DNS_HEADER_H
 
-#include "../utils/byte.h"
-#include "dnsds.h"
+#include "utils/byte.h"
+#include "protocol/dnsds.h"
 
 namespace chara {
 

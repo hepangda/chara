@@ -8,8 +8,7 @@
 
 #include <string>
 
-#include "../utils/byte.h"
-#include "../utils/byte_buffer.h"
+#include "utils/byte.h"
 
 namespace chara {
 

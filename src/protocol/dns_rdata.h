@@ -7,8 +7,10 @@
 #define CHARA_DNS_RDATA_H
 
 #include <memory>
-#include "../utils/byte_buffer.h"
-#include "dns_domain_name.h"
+
+#include "utils/byte_buffer.h"
+#include "protocol/dns_domain_name.h"
+
 namespace chara {
 
 class DnsRdata {

@@ -9,7 +9,7 @@
 
 #include "tcp_session.h"
 #include "udp_session.h"
-#include "../utils/byte_buffer.h"
+#include "utils/byte_buffer.h"
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "InfiniteRecursion"

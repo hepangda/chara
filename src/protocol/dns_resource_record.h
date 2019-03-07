@@ -6,8 +6,9 @@
 #ifndef CHARA_DNS_RESOURCE_RECORD_H
 #define CHARA_DNS_RESOURCE_RECORD_H
 
-#include "dns_domain_name.h"
-#include "dns_rdata.h"
+#include "protocol/dns_domain_name.h"
+#include "protocol/dns_rdata.h"
+
 namespace chara {
 
 class DnsResourceRecord {

@@ -7,10 +7,10 @@
 #define CHARA_DNS_PACKET_H
 
 #include <vector>
-#include "../utils/byte.h"
-#include "dns_query.h"
-#include "dns_header.h"
-#include "dns_resource_record.h"
+#include "utils/byte.h"
+#include "protocol/dns_query.h"
+#include "protocol/dns_header.h"
+#include "protocol/dns_resource_record.h"
 namespace chara {
 
 class DnsPacket {

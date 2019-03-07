@@ -6,15 +6,15 @@
 #ifndef CHARA_STREAMBUF_GUARD_H
 #define CHARA_STREAMBUF_GUARD_H
 
-#include <asio/streambuf.hpp>
-#include "noncopyable.h"
+#include "utils/net_assist.h"
+#include "utils/noncopyable.h"
 
 namespace chara {
 
 class StreambufGuard : public Noncopyable {
  public:
   // constructors
-  StreambufGuard(asio::streambuf &buf, std::size_t size): ref_(buf), size_(size) {
+  StreambufGuard(net::streambuf &buf, std::size_t size): ref_(buf), size_(size) {
     ref_.commit(size_);
   }
 
@@ -23,7 +23,7 @@ class StreambufGuard : public Noncopyable {
     ref_.consume(size_);
   }
  private:
-  asio::streambuf &ref_;
+  net::streambuf &ref_;
   std::size_t size_;
 };
 

@@ -3,11 +3,11 @@
 //  This source code is licensed under the MIT license found in the
 //  LICENSE file in the root directory of this source tree.
 
-#include "byte_buffer.h"
+#include "utils/byte_buffer.h"
 #include <iostream>
 namespace chara {
 
-ByteBuffer::ByteBuffer(size_t size) : ptr_(std::make_unique<Byte[]>(size)), size_(size) {}
+ByteBuffer::ByteBuffer(size_t size) : ptr_(std::make_unique<Byte[]>(size)), size_(size), length_(0) {}
 
 ByteBuffer::ByteBuffer(ByteBuffer &&buffer) noexcept
     : ptr_(buffer.ptr_.release()), size_(buffer.size_), length_(buffer.length_) {}
@@ -19,11 +19,11 @@ ByteBuffer &ByteBuffer::operator=(ByteBuffer &&rhs) noexcept {
   return *this;
 }
 
-asio::const_buffer ByteBuffer::ToConstBuffer() {
+net::const_buffer ByteBuffer::ToConstBuffer() {
   return asio::buffer(ptr_.get(), length_);
 }
 
-asio::mutable_buffer ByteBuffer::ToMutableBuffer() {
+net::mutable_buffer ByteBuffer::ToMutableBuffer() {
   return asio::buffer(ptr_.get(), size_);
 }
 
@@ -44,6 +44,7 @@ void ByteBuffer::Expand(size_t size) {
   auto new_ptr = std::make_unique<Byte[]>(size_ + size);
   memcpy(new_ptr.get(), ptr_.get(), size_);
   ptr_.swap(new_ptr);
+  size_ += size;
 }
 
 void ByteBuffer::Put(const void *x, size_t size) {
@@ -51,7 +52,7 @@ void ByteBuffer::Put(const void *x, size_t size) {
     Expand(size);
   }
   memcpy(write_pointer(), x, size);
-  size_ += size;
+  length_ += size;
 }
 
 void ByteBuffer::Put(const ByteBuffer &buffer) {

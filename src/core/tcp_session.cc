@@ -5,8 +5,8 @@
 
 #include "tcp_session.h"
 
-#include "../utils/byte_buffer.h"
-#include "../utils/streambuf_guard.h"
+#include "utils/byte_buffer.h"
+#include "utils/streambuf_guard.h"
 
 namespace chara {
 

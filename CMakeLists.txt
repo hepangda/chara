@@ -8,7 +8,7 @@ add_definitions("-g")
 aux_source_directory(src/core SOURCE_CORE)
 aux_source_directory(src/protocol SOURCE_PROTOCOL)
 aux_source_directory(src/utils SOURCE_UTILS)
-
+include_directories(src)
 
 add_executable(chara
         src/chara.cc

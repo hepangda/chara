@@ -8,9 +8,9 @@
 
 #include <memory>
 
-#include "byte.h"
-#include "noncopyable.h"
-#include <asio.hpp>
+#include "utils/byte.h"
+#include "utils/noncopyable.h"
+#include "utils/net_assist.h"
 
 namespace chara {
 
@@ -30,15 +30,15 @@ class ByteBuffer : public Noncopyable {
   template<typename T = Byte>
   T *pointer() { return reinterpret_cast<T *>(ptr_.get()); }
   template<typename T = Byte>
-  T *write_pointer() { return reinterpret_cast<T *>(ptr_.get() + size_); }
+  T *write_pointer() { return reinterpret_cast<T *>(ptr_.get() + length_); }
   template<typename T = Byte>
   const T *const_pointer() const { return reinterpret_cast<const T *>(ptr_.get()); }
   std::size_t size() const { return size_; }
   std::size_t length() const { return length_; }
 
   // convert getters
-  asio::mutable_buffer ToMutableBuffer();
-  asio::const_buffer ToConstBuffer();
+  net::mutable_buffer ToMutableBuffer();
+  net::const_buffer ToConstBuffer();
 
   // general functions
   size_t Available() const { return size_ - length_; }
@@ -53,7 +53,7 @@ class ByteBuffer : public Noncopyable {
       Expand(sizeof(T));
     }
     *write_pointer() = x;
-    size_ += sizeof(T);
+    length_ += sizeof(T);
   }
 
 
