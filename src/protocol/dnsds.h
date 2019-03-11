@@ -12,6 +12,10 @@
 
 namespace chara {
 
+constexpr size_t kDnsUdpPacketMaxLength = 512;
+constexpr int kDnsRemoteServerPort = 53;
+constexpr int kCharaPort = 8053;
+
 enum DnsHeaderOpcode : Word {
   kDHOQuery = 0,
   kDHOInverseQuery = 1,
@@ -59,6 +63,10 @@ constexpr void *AddPointer(void *base, size_t offset) {
 
 inline void MovePointer(void **ptr, size_t offset) {
   *ptr = static_cast<Byte *>(*ptr) + offset;
+}
+
+inline Word ExtractWord(const void *stream) {
+  return ExchangeEndian(*static_cast<const Word *>(stream));
 }
 
 inline Word ExtractWord(void **stream) {

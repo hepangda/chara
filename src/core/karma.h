@@ -6,7 +6,8 @@
 #ifndef CHARA_KARMA_H
 #define CHARA_KARMA_H
 
-#include "../utils/net_assist.h"
+#include <core/dns_resolver.h>
+#include <utils/net_assist.h>
 
 namespace chara {
 
@@ -19,13 +20,12 @@ class Karma {
   void Run();
   void DoTcpAccept();
   void DoUdpAccept();
-  void SetTcpOption();
-  void SetUdpOption();
  private:
-  enum { kDnsServerPort = 8053, kDnsUdpLength = 512 };
   net::io_context context_;
+  DnsResolver resolver_;
   neti::tcp::acceptor acceptor_;
-  neti::udp::socket socket_;
+  neti::udp::socket receiver_;
+  neti::udp::socket sender_;
 };
 
 }

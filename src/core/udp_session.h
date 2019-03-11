@@ -7,27 +7,26 @@
 #define CHARA_UDP_SESSION_H
 
 #include <utility>
+#include <core/dns_resolver.h>
 
-#include "../utils/net_assist.h"
-#include "../utils/byte.h"
-#include "../utils/byte_buffer.h"
+#include "utils/net_assist.h"
+#include "utils/byte.h"
+#include "utils/byte_buffer.h"
 
 namespace chara {
 
 class UdpSession : public std::enable_shared_from_this<UdpSession> {
  public:
   // constructors
-  UdpSession(net::io_context &context, neti::udp::endpoint endpoint, ByteBuffer buffer);
-
+  UdpSession(DnsResolver &resolver, const std::shared_ptr<ByteBuffer> &buffer,
+             const std::shared_ptr<asio::ip::udp::endpoint> &endpoint);
   // general functions
   void Start();
  private:
 //  static void Receive(std::shared_ptr<UdpSession> self, )
-  ByteBuffer buffer_;
-  neti::udp::socket rep_socket_;
-  net::streambuf rep_buf_;
-  neti::udp::socket socket_;
-  neti::udp::endpoint endpoint_;
+  DnsResolver &resolver_;
+  std::shared_ptr<ByteBuffer> buffer_;
+  std::shared_ptr<neti::udp::endpoint> endpoint_;
 };
 
 }

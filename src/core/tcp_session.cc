@@ -3,14 +3,15 @@
 //  This source code is licensed under the MIT license found in the
 //  LICENSE file in the root directory of this source tree.
 
+#include <protocol/dnsds.h>
 #include "tcp_session.h"
 
 #include "utils/byte_buffer.h"
 #include "utils/streambuf_guard.h"
 
 namespace chara {
-
-TcpSession::TcpSession(neti::tcp::socket socket) : socket_(std::move(socket)) {}
+TcpSession::TcpSession(DnsResolver &resolver, asio::ip::tcp::socket socket)
+    : resolver_(resolver), socket_(std::move(socket)) {}
 
 void TcpSession::Consume() {
   //
@@ -37,7 +38,7 @@ void TcpSession::Start() {
     if (!ec) {
       {
         StreambufGuard guard{self->buffer_, 2};
-        self->size_ = *static_cast<const Word *>(self->buffer_.data().data());
+        self->size_ = ExtractWord(self->buffer_.data().data());
       }
       auto buf = self->buffer_.prepare(self->size_);
       self->socket_.async_receive(buf, [self](const std::error_code &ec, std::size_t bytes) {

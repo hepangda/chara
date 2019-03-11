@@ -11,8 +11,8 @@
 #include "protocol/dns_packet.h"
 #include <iostream>
 
-constexpr bool kTestFlag = true;
-//constexpr bool kTestFlag = false;
+//constexpr bool kTestFlag = true;
+constexpr bool kTestFlag = false;
 
 int main(int argc, const char *argv[]) {
   using namespace chara;

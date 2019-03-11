@@ -7,15 +7,16 @@
 #define CHARA_TCP_SESSION_H
 
 #include <utility>
+#include <core/dns_resolver.h>
 
-#include "../utils/net_assist.h"
+#include "utils/net_assist.h"
 
 namespace chara {
 
 class TcpSession : public std::enable_shared_from_this<TcpSession> {
  public:
   // constructors
-  explicit TcpSession(neti::tcp::socket socket);
+  TcpSession(DnsResolver &resolver, asio::ip::tcp::socket socket);
 
   // general functions
   void Start();
@@ -27,6 +28,7 @@ class TcpSession : public std::enable_shared_from_this<TcpSession> {
   void Consume();
 
   // members
+  DnsResolver &resolver_;
   neti::tcp::socket socket_;
   net::streambuf buffer_;
   std::size_t size_;
