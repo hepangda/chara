@@ -6,11 +6,15 @@
 #ifndef CHARA_DNS_RESOLVER_H
 #define CHARA_DNS_RESOLVER_H
 
+#include <protocol/dns_packet.h>
 namespace chara {
 
 class DnsResolver {
  public:
-  void Delegate();
+  template <typename Callable, typename ...Args>
+  void Delegate(DnsPacket packet, Callable callable, Args... args) {
+    callable(std::forward(args)...);
+  }
 };
 
 }

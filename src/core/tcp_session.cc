@@ -14,7 +14,10 @@ TcpSession::TcpSession(DnsResolver &resolver, asio::ip::tcp::socket socket)
     : resolver_(resolver), socket_(std::move(socket)) {}
 
 void TcpSession::Consume() {
-  //
+  auto packet = ConstructDnsPacket(buffer_.data().data());
+  resolver_.Delegate(std::move(packet), [] {
+    // TODO: callback here
+  });
 }
 
 void TcpSession::Receive(std::shared_ptr<TcpSession> self, const std::error_code &ec, std::size_t bytes) {

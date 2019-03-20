@@ -7,8 +7,8 @@
 
 namespace chara {
 
-DnsPacket ConstructDnsPacket(void *stream) {
-  void *base = stream, *cursor = stream;
+DnsPacket ConstructDnsPacket(const void *stream) {
+  void *base = const_cast<void *>(stream), *cursor = const_cast<void *>(stream);
 
   DnsPacket ret;
   ret.header_ = ConstructDnsHeader(&cursor, base);
@@ -31,5 +31,31 @@ DnsPacket ConstructDnsPacket(void *stream) {
 
   return std::move(ret);
 }
+
+const DnsHeader &DnsPacket::header() const {
+  return header_;
+}
+const std::vector<DnsQuery> &DnsPacket::questions() const {
+  return questions_;
+}
+const std::vector<DnsResourceRecord> &DnsPacket::answers() const {
+  return answers_;
+}
+const std::vector<DnsResourceRecord> &DnsPacket::authority() const {
+  return authority_;
+}
+const std::vector<DnsResourceRecord> &DnsPacket::additonal() const {
+  return additonal_;
+}
+
+DnsPacket &DnsPacket::operator =(DnsPacket &&rhs) noexcept {
+  header_ = rhs.header_;
+  questions_ = std::move(rhs.questions_);
+  answers_ = std::move(rhs.answers_);
+  authority_ = std::move(rhs.authority_);
+  additonal_ = std::move(rhs.additonal_);
+  return *this;
+}
+
 
 }
